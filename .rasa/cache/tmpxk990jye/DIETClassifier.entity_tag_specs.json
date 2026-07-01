@@ -1,0 +1,28 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-navegador",
+      "2": "I-navegador",
+      "3": "L-navegador",
+      "4": "U-navegador",
+      "5": "B-sistema_operativo",
+      "6": "I-sistema_operativo",
+      "7": "L-sistema_operativo",
+      "8": "U-sistema_operativo",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-navegador": 1,
+      "I-navegador": 2,
+      "L-navegador": 3,
+      "U-navegador": 4,
+      "B-sistema_operativo": 5,
+      "I-sistema_operativo": 6,
+      "L-sistema_operativo": 7,
+      "U-sistema_operativo": 8,
+      "O": 0
+    },
+    "num_tags": 9
+  }
+]

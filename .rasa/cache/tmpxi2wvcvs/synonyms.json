@@ -1,0 +1,14 @@
+{
+  "chrome": "Chrome",
+  "firefox": "Firefox",
+  "edge": "Edge",
+  "safari": "Safari",
+  "google chrome": "Google Chrome",
+  "opera": "Opera",
+  "windows": "Windows",
+  "windows 11": "Windows 11",
+  "mac": "Mac",
+  "linux": "Linux",
+  "ubuntu": "Ubuntu",
+  "macos": "macOS"
+}

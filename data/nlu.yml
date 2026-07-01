@@ -1,0 +1,122 @@
+version: "3.1"
+
+nlu:
+- intent: saludo
+  examples: |
+    - hola
+    - buenos días
+    - buenas tardes
+    - necesito ayuda con la plataforma
+
+- intent: despedida
+  examples: |
+    - gracias por la ayuda
+    - adiós
+    - hasta luego
+    - listo, eso es todo
+
+- intent: reportar_falla_interfaz
+  examples: |
+    - la página se quedó totalmente en blanco
+    - los botones no responden al hacer clic
+    - el menú lateral desapareció
+    - la pantalla parpadea y no me deja hacer nada
+
+- intent: reportar_falla_login
+  examples: |
+    - no puedo entrar a mi cuenta
+    - mi usuario y clave no funcionan
+    - olvidé mi contraseña
+    - la página no me deja iniciar 
+    - me dice que mis credenciales son inválidas
+
+- intent: solicitar_agente
+  examples: |
+    - quiero hablar con un humano
+    - pásame con un agente real
+    - esto no me ayuda, comunícame con soporte
+    - quiero abrir un ticket con un operador
+
+
+- intent: informar_navegador
+  examples: |
+      - uso [Chrome](navegador)
+      - estoy desde [Firefox](navegador)
+      - [Edge](navegador)
+      - mi navegador es [Safari](navegador)
+      - uso [Google Chrome](navegador)
+      - [Opera](navegador)
+
+- intent: informar_sistema_operativo
+  examples: |
+      - uso [Windows](sistema_operativo)
+      - estoy en [Windows 11](sistema_operativo)
+      - mi computadora es una [Mac](sistema_operativo)
+      - uso [Linux](sistema_operativo)
+      - tengo [Ubuntu](sistema_operativo)
+      - [macOS](sistema_operativo)
+      - [Windows](sistema_operativo)
+
+
+- intent: donde_pagar
+  examples: |
+    - ¿Dónde puedo pagar?
+    - ¿Cuáles son los métodos de pago?
+    - ¿Cómo pago mi factura?
+    - quiero pagar el servicio
+    
+- intent: oficinas
+  examples: |
+    - ¿Dónde quedan sus oficinas?
+    - ¿Tienen alguna oficina comercial cerca?
+    - dirección de oficinas
+    - ubicación de atención al cliente
+
+- intent: suspender_servicio
+  examples: |
+    - quiero suspender mi servicio
+    - ¿Cómo hago para cancelar el servicio?
+    - deseo suspender el contrato
+    - dar de baja el servicio
+
+- intent: fecha_corte
+  examples: |
+    - ¿Cuándo es la fecha de corte?
+    - ¿Qué día cortan el servicio?
+    - ¿Hasta cuándo tengo para pagar?
+    - fecha de vencimiento de factura
+
+- intent: restablecer_contraseña
+  examples: |
+    - olvidé mi contraseña
+    - ¿Cómo recupero mi clave?
+    - no puedo entrar a mi cuenta, perdí la clave
+    - restablecer mi contraseña
+
+- intent: sin_audio_canales
+  examples: |
+    - los canales no tienen audio
+    - no se escucha la televisión
+    - la tv está sin sonido
+    - problema de audio en los canales
+
+- intent: decodificador_error_7
+  examples: |
+    - el decodificador me da error 7
+    - aparece error 7 en la pantalla
+    - tengo un problema con el error 7
+    - falla de error 7 en decodificador
+
+- intent: mensaje_stb
+  examples: |
+    - me sale un mensaje de stb no activado
+    - error stb en la pantalla
+    - qué significa stb no activado
+    - mi equipo dice stb
+
+- intent: lentitud_internet
+  examples: |
+    - el internet está muy lento
+    - tengo lentitud en mi conexión
+    - la velocidad del internet es mala
+    - mi internet no carga rápido

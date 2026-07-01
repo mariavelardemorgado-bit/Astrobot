@@ -1,0 +1,69 @@
+version: "3.1"
+
+intents:
+  - saludo
+  - despedida
+  - reportar_falla_interfaz
+  - solicitar_agente
+  - informar_navegador
+  - informar_sistema_operativo 
+  - donde_pagar
+  - oficinas
+  - suspender_servicio
+  - fecha_corte
+  - restablecer_contraseña
+  - sin_audio_canales
+  - decodificador_error_7
+  - mensaje_stb
+  - lentitud_internet
+  - reportar_falla_login
+
+actions:
+  - action_triaje #Esta es la acción para pedir navegador y demas 
+  - action_escalar_humano
+  - action_buscar_faq # Esta es la acción definida para leer los La BD  
+
+entities:
+  - navegador
+  - sistema_operativo
+
+slots:
+  navegador:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: navegador
+  sistema_operativo:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: sistema_operativo
+
+forms:
+  formulario_ticket:
+    required_slots:
+      - navegador
+      - sistema_operativo
+
+responses:
+  utter_saludo:
+    - text: "¡Hola! Soy AstroBot, tu asistente de soporte técnico de Nivel 1. ¿Qué inconveniente estás presentando hoy?"
+
+  utter_despedida:
+    - text: "¡De nada! Tu sesión ha sido registrada. Que tengas un excelente día."
+
+  utter_ask_navegador:
+    - text: "¿Qué navegador web estás utilizando actualmente? (ej. Chrome, Firefox, Safari)"
+  utter_ask_sistema_operativo:
+    - text: "¿Y qué sistema operativo tiene tu equipo? (ej. Windows, macOS, Linux)"
+  utter_ticket_completado:
+    - text: "¡Perfecto! He guardado en memoria que estás en {sistema_operativo} usando {navegador}. Ahora sí podemos proceder."
+
+  utter_escalar_humano:
+    - text: "Entendido. He escalado tu caso al equipo de Soporte. En breve un agente humano se unirá a este chat para ayudarte."
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

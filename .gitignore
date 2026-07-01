@@ -1,0 +1,13 @@
+# Entorno virtual
+venv/
+__pycache__/
+
+# Carpetas de Rasa
+models/
+results/
+story_graph.dot
+
+# Archivos de sistema
+.ipynb_checkpoints/
+*.log
+.DS_Store

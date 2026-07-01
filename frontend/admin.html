@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroBot - Panel de Administración</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .chat-item, .chat-item * {
+            pointer-events: auto !important;
+            cursor: pointer;
+        }
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            background-color: #7b96e6; /* Azul del mockup */
+            height: 100vh;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+        .brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .brand i { font-size: 3rem; color: #111; background: white; border-radius: 50%; padding: 10px;}
+        
+        .menu-btn {
+            background-color: white;
+            color: #333;
+            margin: 8px 20px;
+            padding: 12px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: none;
+            text-align: left;
+            transition: 0.2s;
+        }
+        .menu-btn:hover { background-color: #f8f9fa; }
+        .menu-btn.active { box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 5px solid #a491d3;}
+        
+        /* Colores de los circulitos del menú */
+        .c-green { color: #4caf50; }
+        .c-purple { color: #9c27b0; }
+        .c-blue { color: #2196f3; }
+        .c-yellow { color: #ffeb3b; }
+        .c-pink { color: #e91e63; }
+        .c-grey { color: #9e9e9e; }
+
+        /* --- VISTAS --- */
+        .view-section {
+            display: none; /* Oculto por defecto */
+            height: 100vh;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .view-section.active {
+            display: block; /* Muestra la sección activa */
+        }
+
+        /* --- BANDEJA DE ENTRADA (CHAT ADMIN) --- */
+        .inbox-container {
+            display: flex;
+            height: calc(100vh - 40px);
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .inbox-list {
+            width: 300px;
+            background-color: #333;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        .inbox-list .search-bar { padding: 20px; }
+        .inbox-list input { border-radius: 20px; width: 100%; padding: 8px 15px; border: none; }
+        .chat-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #444;
+        }
+        .chat-item:hover, .chat-item.active { background-color: #444; }
+        
+        .chat-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #fafafa;
+        }
+        .chat-header {
+            background-color: #a491d3;
+            padding: 15px 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .msg { max-width: 60%; padding: 12px 18px; border-radius: 20px; margin-bottom: 15px; }
+        .msg-user { background: #9683c9; color: white; align-self: flex-start; border-radius: 0 20px 20px 20px;}
+        .msg-admin { background: #555; color: white; align-self: flex-end; border-radius: 20px 0 20px 20px;}
+        
+        .chat-input {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input input { flex-grow: 1; border-radius: 5px; border: 1px solid #ccc; padding: 10px; }
+
+        /* --- LOGS (TABLA MYSQL) --- */
+        .logs-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+        .table th { color: #666; font-size: 0.85rem; }
+        .table td { vertical-align: middle; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        
+        <div class="col-md-2 sidebar">
+            <div class="brand">
+                <i class="fa-solid fa-robot"></i>
+                <h5 class="mt-2">AstroBot</h5>
+            </div>
+            
+            <button class="menu-btn"><i class="fa-solid fa-circle c-green"></i> Panel de Control</button>
+            <button class="menu-btn"><i class="fa-solid fa-circle c-purple"></i> Gestión de Sesiones</button>
+            <button class="menu-btn"><i class="fa-solid fa-circle c-blue"></i> Base de Conocimiento</button>
+            <button class="menu-btn"><i class="fa-solid fa-circle c-yellow"></i> Gestión de Admins</button>
+            <button class="menu-btn active" onclick="switchView('inbox')"><i class="fa-solid fa-circle c-pink"></i> Bandeja de entrada</button>
+            <button class="menu-btn" onclick="switchView('logs')"><i class="fa-solid fa-circle c-grey"></i> Logs</button>
+        </div>
+
+        <div class="col-md-10">
+            
+            <div id="view-inbox" class="view-section active">
+                <div class="inbox-container">
+                    <div class="inbox-list">
+                        <div class="search-bar">
+                            <h5 class="mb-3">Bandeja de Entrada</h5>
+                            <input type="text" placeholder="Buscar">
+                        </div>
+                        
+
+                    </div>
+                    
+                    <div class="chat-area">
+                        <div class="chat-header">
+                            <i class="fa-regular fa-circle-user fa-2x"></i>
+                            <div>
+                                <h6 class="mb-0">Bienvenido</h6>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-messages">
+                            <div class="msg msg-admin">AstroBot ha escalado este caso a Agente Maria</div>
+                        </div>
+                        
+                        <div class="chat-input">
+                            <input type="text" placeholder="Hola, te saluda Maria. Estamos revisando tu caso.">
+                            <button class="btn btn-outline-secondary"><i class="fa-regular fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-logs" class="view-section">
+                <div class="logs-container">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4>Historial de Chats (Logs)</h4>
+                        <div class="d-flex gap-2">
+                            <input type="text" class="form-control" placeholder="Buscar logs">
+                            <button class="btn btn-outline-secondary"><i class="fa-solid fa-filter"></i> Filtrar</button>
+                        </div>
+                    </div>
+                    
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID_MENSAJE</th>
+                                <th>ID_SESION</th>
+                                <th>ID_USUARIO</th>
+                                <th>REMITENTE</th>
+                                <th>MENSAJE</th>
+                                <th>INTENCION RASA</th>
+                                <th>AGENTE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td><td>1</td><td>114</td><td>USUARIO</td>
+                                <td>NO PUEDO INGRESAR A MI CUENTA</td><td>-</td><td>-</td>
+                            </tr>
+                            <tr>
+                                <td>2</td><td>1</td><td>114</td><td>ASTRO BOT</td>
+                                <td>¿HAS INTENTADO RECUPERAR TU CONTRASEÑA?</td><td>Olvido De Clave</td><td>-</td>
+                            </tr>
+                            <tr>
+                                <td>3</td><td>1</td><td>114</td><td>USUARIO</td>
+                                <td>NO, COMO LO HAGO?</td><td>-</td><td>-</td>
+                            </tr>
+                            <tr>
+                                <td>4</td><td>1</td><td>114</td><td>ASTRO BOT</td>
+                                <td>PARA RECUPERAR TU CUENTA VE A GESTIONAR CUENTA...</td><td>FAQ - Olvido Clave</td><td>-</td>
+                            </tr>
+                            <tr>
+                                <td>5</td><td>4</td><td>268</td><td>USUARIO</td>
+                                <td>PUEDO HABLAR CON UN AGENTE?</td><td>-</td><td>-</td>
+                            </tr>
+                            <tr>
+                                <td>6</td><td>4</td><td>268</td><td>ASTRO BOT</td>
+                                <td>CLARO YA MISMO TE TRANSFIERO</td><td>Escalar Chat</td><td>-</td>
+                            </tr>
+                            <tr>
+                                <td>7</td><td>4</td><td>268</td><td>AGENTE</td>
+                                <td>HOLA, TE ESCRIBE MARIA...</td><td>-</td><td>ADMIN MARIA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--  Funcionalidad del Panel Admin -->
+<script>
+    // Cambio de vistas entre secciones
+    function switchView(viewName) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.menu-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById('view-' + viewName).classList.add('active');
+        // Seleccionamos el botón correspondiente por su data-view o clase
+        document.querySelector(`[onclick="switchView('${viewName}')"]`).classList.add('active');
+    }
+
+    // Envío de mensaje desde Admin
+    async function enviarMensajeAdmin() {
+        const inputAdmin = document.querySelector('.chat-input input');
+        const mensaje = inputAdmin.value.trim();
+        
+        if (mensaje === '') return;
+
+        const chatMessages = document.querySelector('.chat-messages');
+        const div = document.createElement('div');
+        div.className = 'msg msg-admin';
+        div.textContent = mensaje;
+        chatMessages.appendChild(div);
+        
+        inputAdmin.value = '';
+    }
+
+    document.querySelector('.chat-input button').addEventListener('click', enviarMensajeAdmin);
+
+    // API de flask para que lleguen los tickets los usuarios
+async function monitorearTickets() {
+    try {
+        const response = await fetch('http://localhost:5000/api/tickets');
+        const tickets = await response.json();
+        const bandejaLista = document.querySelector('.inbox-list');
+
+        // Hace que los clics funcionen correctamente. 
+        bandejaLista.innerHTML = `
+            <div class="search-bar">
+                <h5 class="mb-3">Bandeja de Entrada</h5>
+                <input type="text" placeholder="Buscar ticket...">
+            </div>
+        `;
+
+        if (tickets.length === 0) {
+            bandejaLista.innerHTML += `<div class="p-3 text-center text-muted"><small>No hay casos pendientes</small></div>`;
+            return;
+        }
+
+        tickets.forEach(ticket => {
+            const div = document.createElement('div');
+            div.className = 'chat-item';
+            div.dataset.id = ticket.ID_Sesion;
+            div.innerHTML = `
+                <div class="fw-bold">Sesión: ${ticket.ID_Sesion}</div>
+                <small class="text-white-50">${ticket.Mensaje_Usuario.substring(0, 30)}...</small>
+            `;
+            bandejaLista.appendChild(div);
+        });
+    } catch (error) {
+        console.error("Error en radar:", error);
+    }
+}
+
+document.addEventListener('click', function(e) {
+    // Para poder hacer click en las funciones.  
+    const chatItem = e.target.closest('.chat-item');
+    
+    if (chatItem) {
+        const idSesion = chatItem.getAttribute('data-id');
+        console.log("Clic detectado en sesión:", idSesion);
+        cargarChatSesion(idSesion);
+    }
+});
+
+    // Carga lo que recibe la API al registrar la sesión
+async function cargarChatSesion(idSesion) {
+    document.querySelector('.chat-header h6').textContent = "Chat Sesión: " + idSesion;
+    const chatMessages = document.querySelector('.chat-messages');
+    chatMessages.innerHTML = ''; 
+
+    const response = await fetch(`http://localhost:5000/api/historial/${idSesion}`);
+    const historial = await response.json();
+
+    historial.forEach(msg => {
+        const div = document.createElement('div');
+        if (msg.Remitente === 'USUARIO') { //Organización de mensajes 
+            div.className = 'msg msg-user';
+        } else {
+            div.className = 'msg msg-admin';
+        }
+        div.textContent = `[${msg.Remitente}] ${msg.Mensaje}`;
+        chatMessages.appendChild(div);
+    });
+}
+    // Inicialización
+    monitorearTickets();
+</script>
+
+</body>
+</html>

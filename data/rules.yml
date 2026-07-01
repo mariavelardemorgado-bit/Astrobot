@@ -1,0 +1,81 @@
+version: "3.1"
+
+rules:
+
+  - rule: Saludar siempre al inicio
+    steps:
+      - intent: saludo
+      - action: utter_saludo
+
+  - rule: Despedirse al terminar
+    steps:
+      - intent: despedida
+      - action: utter_despedida
+
+  - rule: Escalar a humano directamente
+    steps:
+      - intent: solicitar_agente
+      - action: utter_escalar_humano
+      - action: action_escalar_humano
+
+  - rule: Activar formulario de soporte
+    steps:
+      - intent: reportar_falla_interfaz
+      - action: formulario_ticket
+      - active_loop: formulario_ticket
+
+  - rule: Desactivar formulario y confirmar datos
+    condition:
+      - active_loop: formulario_ticket
+    steps:
+      - action: formulario_ticket
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: utter_ticket_completado
+      - action: action_triaje
+
+  - rule: Responder FAQ - Donde Pagar
+    steps:
+    - intent: donde_pagar
+    - action: action_buscar_faq
+
+  - rule: Responder FAQ - Oficinas
+    steps:
+    - intent: oficinas
+    - action: action_buscar_faq
+
+  - rule: Responder FAQ - Suspender Servicio
+    steps:
+    - intent: suspender_servicio
+    - action: action_buscar_faq
+
+  - rule: Responder FAQ - Fecha de Corte
+    steps:
+    - intent: fecha_corte
+    - action: action_buscar_faq
+
+  - rule: Responder FAQ - Restablecer Contraseña
+    steps:
+    - intent: restablecer_contraseña
+    - action: action_buscar_faq
+
+  - rule: Responder FAQ - Sin Audio
+    steps:
+    - intent: sin_audio_canales
+    - action: action_buscar_faq
+
+  - rule: Responder FAQ - Error 7
+    steps:
+    - intent: decodificador_error_7
+    - action: action_buscar_faq
+
+  - rule: Responder FAQ - Mensaje STB
+    steps:
+    - intent: mensaje_stb
+    - action: action_buscar_faq
+
+  - rule: Responder FAQ - Lentitud Internet
+    steps:
+    - intent: lentitud_internet
+    - action: action_buscar_faq

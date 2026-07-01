@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroBot - Soporte Técnico</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style> /*Estilos del ccs nativos*/
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* --- ESTILOS DEL MENÚ LATERAL --- */
+        .sidebar {
+            background-color: #6384d9; /* Azul del diseño */
+            height: 100vh;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .user-profile {
+            padding: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-profile i { font-size: 2rem; }
+        
+        .search-container {
+            padding: 0 20px 20px 20px;
+        }
+        .search-container input {
+            border-radius: 20px;
+            padding-left: 35px;
+        }
+        .search-container i {
+            position: absolute;
+            left: 35px;
+            top: 92px;
+            color: #ccc;
+        }
+
+        .bot-pinned {
+            background-color: white;
+            margin: 0 20px 20px 20px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: bold;
+            color: #333;
+        }
+        .bot-pinned i.fa-robot { color: #6b4c9a; font-size: 1.5rem; }
+        .bot-pinned i.fa-thumbtack { color: #888; }
+
+        .menu-item {
+            background-color: white;
+            margin: 5px 20px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            color: #444;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .menu-item i { color: #333; font-size: 1.2rem; }
+
+        /* --- ESTILOS DEL ÁREA DE CHAT --- */
+        .chat-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            background-color: white;
+        }
+        
+        .chat-header {
+            background-color: #a491d3; /* Morado del header */
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+        .chat-header i { font-size: 2.5rem; background: white; color: #6b4c9a; border-radius: 50%; padding: 10px; }
+        .chat-header .status { font-size: 0.85rem; opacity: 0.9; }
+
+        .chat-history {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .date-divider {
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        /* Burbujas de mensaje */
+        .message {
+            max-width: 60%;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .message-bot {
+            align-self: flex-start;
+            background: linear-gradient(135deg, #7c9ae6, #a491d3);
+            color: #111;
+            font-weight: 500;
+            border-radius: 0px 20px 20px 20px; /* Esquina superior izquierda cuadrada */
+        }
+        
+        .message-user {
+            align-self: flex-end;
+            background-color: #111;
+            color: white;
+            border-radius: 20px 0px 20px 20px; /* Esquina superior derecha cuadrada */
+        }
+
+        /* Zona de escritura */
+        .chat-input-area {
+            padding: 20px 30px;
+            background-color: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .chat-input-area input {
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            padding: 12px 20px;
+            border-radius: 30px;
+            outline: none;
+        }
+        
+        .btn-send {
+            background-color: #111;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-send:hover { background-color: #333; }
+
+    </style>
+</head>
+<body>
+
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        
+        <div class="col-md-3 sidebar">
+            <div class="user-profile">
+                <i class="fa-regular fa-circle-user"></i>
+                <h4 class="mb-0">Tu cuenta</h4>
+            </div>
+            
+            <div class="search-container position-relative">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="form-control" placeholder="Buscar">
+            </div>
+
+            <div class="bot-pinned">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-robot"></i> AstroBot
+                </div>
+                <i class="fa-solid fa-thumbtack"></i>
+            </div>
+
+            <div class="menu-item"><i class="fa-regular fa-bell"></i> Pendientes</div>  <!-- Meramente decorativo para respetar el prototipo -->
+            <div class="menu-item"><i class="fa-solid fa-gear"></i> Gestionar Cuenta</div>
+            <div class="menu-item"><i class="fa-solid fa-wallet"></i> Wallet</div>
+            <div class="menu-item"><i class="fa-solid fa-cube"></i> Tu espacio</div>
+            <div class="menu-item mt-4"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesion</div>
+        </div>
+
+        <div class="col-md-9 chat-container">
+            
+            <div class="chat-header">
+                <i class="fa-solid fa-robot"></i>
+                <div>
+                    <h5 class="mb-0">AstroBot</h5>
+                    <div class="status">Activo 24/7</div>
+                </div>
+            </div>
+
+            <div class="chat-history" id="chat-history">
+                
+                <div class="date-divider">Julio, 2026</div>
+
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="user-input" placeholder="Escribe tu mensaje..." autocomplete="off">
+                <button class="btn-send" id="btn-enviar">Enviar <i class="fa-solid fa-paper-plane ms-2"></i></button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const chatHistory = document.getElementById('chat-history');
+    const userInput = document.getElementById('user-input');
+    const btnEnviar = document.getElementById('btn-enviar');
+
+    // URL de tu servidor local de Rasa para hacer conexión con la API 
+    const rasaUrl = 'http://localhost:5005/webhooks/rest/webhook';
+    
+    // El ID se genera de forma random porque no se puedo conectar con usuario sesion 
+    const senderId = Math.floor(Math.random() * 10000).toString();
+
+    // Esta función lo que hace es respetar la interfaz UI cuando se coloquen los mensajes 
+    function agregarMensaje(texto, tipo) {
+        const div = document.createElement('div');
+        div.className = `message ${tipo}`;
+        div.innerHTML = texto.replace(/\n/g, '<br>');
+        chatHistory.appendChild(div);
+        
+        // Hacer scroll automático hacia abajo
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    // 2. Función principal de comunicación
+    async function enviarMensaje() {
+        const mensaje = userInput.value.trim();
+        if (mensaje === '') return; // Evita enviar mensajes en blanco
+
+        agregarMensaje(mensaje, 'message-user');
+        userInput.value = ''; // Limpia el input de texto 
+
+        // Comunicación con la api de RASA 
+        try {
+            const response = await fetch(rasaUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sender: senderId,
+                    message: mensaje
+                })
+            });
+
+            const respuestasRasa = await response.json();
+
+            // Respuesta de astrobot 
+            if (respuestasRasa && respuestasRasa.length > 0) {
+                respuestasRasa.forEach(respuesta => {
+                    if (respuesta.text) {
+                        agregarMensaje(respuesta.text, 'message-bot');
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error al conectar con Rasa:', error);
+            agregarMensaje('AstroBot está desconectado. Revisa tus terminales.', 'message-bot');
+        }
+    }
+
+    // Activan los eventos.  
+    btnEnviar.addEventListener('click', enviarMensaje); // Clic en el botón
+
+    userInput.addEventListener('keypress', function(e) { // Presionar tecla Enter
+        if (e.key === 'Enter') {
+            enviarMensaje();
+        }
+    });
+</script>
+
+</body>
+</html>
