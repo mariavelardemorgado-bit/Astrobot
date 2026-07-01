@@ -6,6 +6,7 @@ __pycache__/
 models/
 results/
 story_graph.dot
+.rasa/
 
 # Archivos de sistema
 .ipynb_checkpoints/
